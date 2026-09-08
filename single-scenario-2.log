@@ -1,0 +1,321 @@
+﻿[dotenv@17.3.1] injecting env (2) from .env.staging -- tip: ΓÜí∩╕Å secrets for agents: https://dotenvx.com/as2
+
+Running 1 test using 1 worker
+
+[1A[2K[dotenv@17.3.1] injecting env (0) from .env.staging -- tip: ΓÜÖ∩╕Å  write to custom object with { processEnv: myObject }
+
+[1A[2K[1/1] [chromium] ΓÇ║ .features-gen\features\start-diffuser-program-tile.feature.spec.js:6:7 ΓÇ║ Start Diffuser Program tile navigation ΓÇ║ Start Diffuser Program tile diffuser program with "Generate Variant Internally" option enabled specifying the interval count and the lock technical settings and lock diffuser mode enabled @ui @sap @diffuser @start-diffuser-program
+[1A[2K[chromium] ΓÇ║ .features-gen\features\start-diffuser-program-tile.feature.spec.js:6:7 ΓÇ║ Start Diffuser Program tile navigation ΓÇ║ Start Diffuser Program tile diffuser program with "Generate Variant Internally" option enabled specifying the interval count and the lock technical settings and lock diffuser mode enabled @ui @sap @diffuser @start-diffuser-program
+[BEFORE] Reset global state for new test scenario
+
+[1A[2K[COLUMN] Checking diffuser page for column "Program/Class"
+
+[1A[2K[COLUMN] Page text length: 657, searching for "Program/Class"
+
+[1A[2K[COLUMN] Contains column: false
+
+[1A[2K[COLUMN] Flexible search for parts: Program, Class
+
+[1A[2K[COLUMN] Found part "Class" from "Program/Class"
+
+[1A[2K[COLUMN] Checking diffuser page for column "Description"
+
+[1A[2K[COLUMN] Page text length: 657, searching for "Description"
+
+[1A[2K[COLUMN] Contains column: true
+
+[1A[2K[COLUMN] Checking diffuser page for column "Interval Object"
+
+[1A[2K[COLUMN] Page text length: 657, searching for "Interval Object"
+
+[1A[2K[COLUMN] Contains column: true
+
+[1A[2K[COLUMN] Checking diffuser page for column "Actions"
+
+[1A[2K[COLUMN] Page text length: 657, searching for "Actions"
+
+[1A[2K[COLUMN] Contains column: true
+
+[1A[2K[PROGRAM] Searching for "/BTR/DIF_CL_AUTO_SFLIGHT" on page with 677 characters
+
+[1A[2K[PROGRAM] First 500 chars: Diffuser
+Diffuser
+Start Diffuser Program
+Diffuser
+0
+Start Diffuser Program
+	
+Program / Class
+	
+Description
+	
+Interval Object
+	
+Actions
+	
+	/BTR/DIF_TEST	/BTR/DIF_TEST		
+	
+	/BTI/TEST_4	/BTI/TEST_4		
+	
+	/btr/test123	/btr/test123		
+	
+	YASAG_TEST_CL	YASAG_TEST_CL	MATERIAL	
+	
+	ZBTR_DIF_CL_TORCH	ZBTR_DIF_CL_TORCH		
+	
+	ZBTR_DIF_CL_METERTOCASH_M	ZBTR_DIF_CL_METERTOCASH_M		
+	
+	/BTR/DIF_CL_SAMPLE_LATE_BILL	/BTR/DIF_CL_SAMPLE_LATE_BILL		
+	
+	/BTR/DIF_CL_SAMPLE_SFLIGHT_02	/BTR/DIF_CL_SAMPLE_SFLIGHT_02		
+	
+	/B
+
+[1A[2K[PROGRAM] Found "/BTR/DIF_CL_AUTO_SFLIGHT" on attempt 1
+
+[1A[2K[TAB] Attempt 1: Text length = 0
+
+[1A[2K[TAB] Attempt 2: Text length = 0
+
+[1A[2K[TAB] Attempt 3: Text length = 0
+
+[1A[2K[TAB] Attempt 4: Text length = 0
+
+[1A[2K[TAB] Attempt 5: Text length = 0
+
+[1A[2K[TAB] Attempt 6: Text length = 0
+
+[1A[2K[TAB] Attempt 7: Text length = 0
+
+[1A[2K[TAB] Attempt 8: Text length = 0
+
+[1A[2K[TAB] Attempt 9: Text length = 0
+
+[1A[2K[TAB] Attempt 10: Text length = 167
+
+[1A[2K[TAB] Looking for "New Job: Diffuser Automation test Template" in page
+
+[1A[2K[TAB] Text sample: Application Jobs
+Application Jobs
+1Template Selection	2Scheduling Options	3Parameters(Optional)
+Template Selection
+Job Template
+Job Name
+Schedule
+Check
+Template
+Cancel
+
+[1A[2K[TAB] Attempt 11: Text length = 260
+
+[1A[2K[TAB] Looking for "New Job: Diffuser Automation test Template" in page
+
+[1A[2K[TAB] Text sample: New Job: Diffuser Automation test Template
+New Job: Diffuser Automation test Template
+Diffuser Automation test Template
+1Template Selection	2Scheduling Options	3Parameters(Optional)
+Template Selection
+Job Template
+Job Name
+Step 2
+Schedule
+Check
+Template
+Cancel
+
+[1A[2K[TAB] Found title in page text
+
+[1A[2K[FIELD] Found timezone indicator for "Job Start(Local time):"
+
+[1A[2K[VERIFY] Skipping strict verification of field "Interval Size:"="0" (display-only field, visible in screenshot)
+
+[1A[2K[VERIFY] Skipping strict verification of field "Interval Size:" is disabled (visible in screenshot)
+
+[1A[2K[VERIFY] Skipping strict verification of field "Interval Count:"="100" (display-only field, visible in screenshot)
+
+[1A[2K[VERIFY] Skipping strict verification of field "Interval Count:" is disabled (visible in screenshot)
+
+[1A[2K[VERIFY] Skipping strict verification of field "Number of parallel processes::"="4" (display-only field, visible in screenshot)
+
+[1A[2K[VERIFY] Skipping strict verification of field "Number of parallel processes::" is disabled (visible in screenshot)
+
+[1A[2K[VERIFY] Skipping strict verification of field "Run Label:"="/BTR/DIF_CL_AUTO_SFLIGHT_1" (display-only field, visible in screenshot)
+
+[1A[2K[VERIFY] Skipping strict verification of field "Run Label:" is disabled (visible in screenshot)
+
+[1A[2K[TAB_SWITCH] Total open pages: 2
+
+[1A[2K[TAB_SWITCH] Checking page: https://bs4b5tap1.bti.local:44301/sap/bc/ui2/flp?sap-client=100&sap-language=EN#diffuser-display&/monitorDiffuserProgram/program/2607B5T1000000180010/instance//filtersSet/true
+
+[1A[2K[TAB_SWITCH] Closing tab: https://bs4b5tap1.bti.local:44301/sap/bc/ui2/flp?sap-client=100&sap-language=EN#ApplicationJob-show?JobCatalogEntryName=ZDIF_AUTO_SFLIGHT_CATALOG&/v4_JobRunCreate
+
+[1A[2K[TAB_SWITCH] Switched to Diffuser tab: https://bs4b5tap1.bti.local:44301/sap/bc/ui2/flp?sap-client=100&sap-language=EN#diffuser-display&/monitorDiffuserProgram/program/2607B5T1000000180010/instance//filtersSet/true
+
+[1A[2K[MONITOR] Verifying instance row: /BTR/DIF_CL_AUTO_SFLIGHT_1
+
+[1A[2K[APP_LOG] Looking for "Pause Instance" button for instance "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö page has 1 tabs
+
+[1A[2K[APP_LOG] Instance row found: true
+
+[1A[2K[APP_LOG] Found button in row, clicking...
+
+[1A[2K[APP_LOG] After button click, page count: 1 (was 1)
+
+node.exe : [1A[2K[MONITOR] Status "Stopped" not visible for 
+"/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö continuing
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Users\SulemanKhawar\AppData\ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([1A[2K[MONITO... ΓÇö continuing 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+[1A[2K[MONITOR] Found "TESTALL" in "Started By" column for "/BTR/DIF_CL_AUTO_SFLIGHT_1" (attempt 1)
+
+[1A[2K[MONITOR] Found "4" in "Requested Processes" column for "/BTR/DIF_CL_AUTO_SFLIGHT_1" (attempt 1)
+
+[1A[2K[INTERVAL] Interval table contains approximately 106 rows (expected 99)
+
+[1A[2K[INTERVAL] Found "Stopped" 3 times in interval table Status column
+
+
+[1A[2K[INTERVAL] Interval table still appears to be displayed ΓÇö continuing
+[1A[2K[APP_LOG] Looking for "Parameters" button for instance "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö page has 1 tabs
+
+[1A[2K[APP_LOG] Instance row found: true
+
+[1A[2K[APP_LOG] Found button in row, clicking...
+
+[1A[2K[APP_LOG] After button click, page count: 2 (was 1)
+
+[1A[2K[APP_LOG] New tab detected for "Parameters" button
+
+[1A[2K[TAB_HEADER] Found header "Job Details" on new tab
+
+[1A[2K[TAB_SWITCH] Total open pages: 2
+
+[1A[2K[TAB_SWITCH] Checking page: https://bs4b5tap1.bti.local:44301/sap/bc/ui2/flp?sap-client=100&sap-language=EN#diffuser-display&/monitorDiffuserProgram/program/2607B5T1000000180010/instance//filtersSet
+
+[1A[2K[TAB_SWITCH] Closing tab: https://bs4b5tap1.bti.local:44301/sap/bc/ui2/flp?sap-client=100&sap-language=EN#ApplicationJob-show?JobCatalogEntryName=&/v4_JobRunDetails/06574528E67D1FE1A19E67B5AF9CCFCC%20xvIQRSLN
+
+[1A[2K[TAB_SWITCH] Switched to Diffuser tab: https://bs4b5tap1.bti.local:44301/sap/bc/ui2/flp?sap-client=100&sap-language=EN#diffuser-display&/monitorDiffuserProgram/program/2607B5T1000000180010/instance//filtersSet
+
+[1A[2K[APP_LOG] Looking for "Application Log" button for instance "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö page has 1 tabs
+
+[1A[2K[APP_LOG] Instance row found: true
+
+[1A[2K[APP_LOG] Found button in row, clicking...
+
+[1A[2K[APP_LOG] After button click, page count: 2 (was 1)
+
+[1A[2K[APP_LOG] New tab detected for "Application Log" button
+
+[1A[2K[TAB_HEADER] Found header "Log Details" on new tab
+
+[1A[2K[COLUMN] Checking job page for column "Type"
+
+[1A[2K[COLUMN] Page text length: 766, searching for "Type"
+
+[1A[2K[COLUMN] Contains column: true
+
+[1A[2K[COLUMN] Checking job page for column "Message"
+
+[1A[2K[COLUMN] Page text length: 800, searching for "Message"
+
+[1A[2K[COLUMN] Contains column: true
+
+[1A[2K[COLUMN] Checking job page for column "Created on"
+
+[1A[2K[COLUMN] Page text length: 800, searching for "Created on"
+
+[1A[2K[COLUMN] Contains column: false
+
+[1A[2K[TAB_SWITCH] Total open pages: 2
+
+[1A[2K[TAB_SWITCH] Checking page: https://bs4b5tap1.bti.local:44301/sap/bc/ui2/flp?sap-client=100&sap-language=EN#diffuser-display&/monitorDiffuserProgram/program/2607B5T1000000180010/instance//filtersSet
+
+[1A[2K[TAB_SWITCH] Closing tab: https://bs4b5tap1.bti.local:44301/sap/bc/ui2/flp?sap-client=100&sap-language=EN#ApplicationLog-showDetails&/ShowMsg/%252FApplicationLogOverviewSet('1bT5AEPz7{6XdcVDgp5Fp0')/default
+
+[1A[2K[TAB_SWITCH] Switched to Diffuser tab: https://bs4b5tap1.bti.local:44301/sap/bc/ui2/flp?sap-client=100&sap-language=EN#diffuser-display&/monitorDiffuserProgram/program/2607B5T1000000180010/instance//filtersSet
+
+[1A[2K[APP_LOG] Looking for "Parallel Processes" button for instance "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö page has 1 tabs
+
+[1A[2K[APP_LOG] Instance row found: true
+
+[1A[2K[APP_LOG] Found button in row, clicking...
+
+[1A[2K[APP_LOG] After button click, page count: 1 (was 1)
+
+[1A[2K[POPUP] Looking for "Parallel Processes" popup on the Diffuser page
+
+[1A[2K[POPUP] Found popup "Parallel Processes"
+
+[1A[2K[COLUMN] Checking diffuser page for column "Job Description"
+
+[1A[2K[COLUMN] Page text length: 2400, searching for "Job Description"
+
+[1A[2K[COLUMN] Contains column: true
+
+[1A[2K[COLUMN] Checking diffuser page for column "Status"
+
+[1A[2K[COLUMN] Page text length: 2400, searching for "Status"
+
+[1A[2K[COLUMN] Contains column: true
+
+[1A[2K[COLUMN] Checking diffuser page for column "Actions"
+
+[1A[2K[COLUMN] Page text length: 2400, searching for "Actions"
+
+[1A[2K[COLUMN] Contains column: true
+
+[1A[2K[POPUP] Clicking "Close" button on Parallel Processes popup
+
+[1A[2K[POPUP] Clicked "Close" on popup
+
+[1A[2K[APP_LOG] Looking for "Resume Instance" button for instance "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö page has 1 tabs
+
+[1A[2K[APP_LOG] Instance row found: true
+
+[1A[2K[APP_LOG] Button not found in row, trying page-level search...
+
+[1A[2K[APP_LOG] Found button at page level, clicking...
+
+[1A[2K[APP_LOG] After button click, page count: 1 (was 1)
+
+[1A[2K[MONITOR] "Complete" not yet "100%" for "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö row: /BTR/DIF_CL_AUTO_SFLIGHT_1TESTALL21.07.2026, 11:59:28In ProcessObject StatusInformative entry84%84%  0:00:250ParametersApplication LogPause InstancePa
+
+[1A[2K[MONITOR] Reloading page to check "Complete" = "100%" (attempt 2/30)...
+
+[1A[2K[MONITOR] "Complete" not yet "100%" for "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö row: /BTR/DIF_CL_AUTO_SFLIGHT_1TESTALL21.07.2026, 11:59:2821.07.2026, 12:01:49FinishedObject StatusEntry successfully validated100%100%0TransformResultsPar
+
+[1A[2K[MONITOR] Reloading page to check "Complete" = "100%" (attempt 3/30)...
+
+[1A[2K[MONITOR] "Complete" not yet "100%" for "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö row: /BTR/DIF_CL_AUTO_SFLIGHT_1TESTALL21.07.2026, 11:43:55In ProcessObject StatusInformative entry20%20%  0:01:450ParametersApplication LogPause InstancePa
+
+[1A[2K[MONITOR] Reloading page to check "Complete" = "100%" (attempt 4/30)...
+
+[1A[2K[MONITOR] "Complete" not yet "100%" for "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö row: /BTR/DIF_CL_AUTO_SFLIGHT_1TESTALL21.07.2026, 11:43:55In ProcessObject StatusInformative entry40%40%  0:01:210ParametersApplication LogPause InstancePa
+
+[1A[2K[MONITOR] Reloading page to check "Complete" = "100%" (attempt 5/30)...
+
+[1A[2K[MONITOR] "Complete" not yet "100%" for "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö row: /BTR/DIF_CL_AUTO_SFLIGHT_1TESTALL21.07.2026, 11:43:55In ProcessObject StatusInformative entry60%60%  0:00:550ParametersApplication LogPause InstancePa
+
+[1A[2K[MONITOR] Reloading page to check "Complete" = "100%" (attempt 6/30)...
+
+[1A[2K[MONITOR] "Complete" not yet "100%" for "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö row: /BTR/DIF_CL_AUTO_SFLIGHT_1TESTALL21.07.2026, 11:43:55In ProcessObject StatusInformative entry80%80%  0:00:300ParametersApplication LogPause InstancePa
+
+[1A[2K[MONITOR] Reloading page to check "Complete" = "100%" (attempt 7/30)...
+
+[1A[2K[MONITOR] "Complete" not yet "100%" for "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö row: /BTR/DIF_CL_AUTO_SFLIGHT_1TESTALL21.07.2026, 11:43:5521.07.2026, 12:03:50FinishedObject StatusEntry successfully validated100%100%0TransformResultsPar
+
+[1A[2K[MONITOR] Reloading page to check "Complete" = "100%" (attempt 8/30)...
+
+[1A[2K[MONITOR] "Complete" not yet "100%" for "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö row: /BTR/DIF_CL_AUTO_SFLIGHT_1TESTALL21.07.2026, 11:56:54StoppedObject StatusWarning issued0%0%  0:00:000ParametersApplication LogResume InstanceParallel 
+
+[1A[2K[MONITOR] Reloading page to check "Complete" = "100%" (attempt 9/30)...
+
+[1A[2K[MONITOR] "Complete" not yet "100%" for "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö row: /BTR/DIF_CL_AUTO_SFLIGHT_1TESTALL21.07.2026, 11:56:54StoppedObject StatusWarning issued0%0%  0:00:000ParametersApplication LogResume InstanceParallel 
+
+[1A[2K[MONITOR] Reloading page to check "Complete" = "100%" (attempt 10/30)...
+
