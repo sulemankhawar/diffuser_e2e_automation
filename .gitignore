@@ -7,8 +7,14 @@ tests/.features-gen/
 test-results/
 .env.local
 
-# Playwright
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
+
+playwright-report
+allure-results
+allure-report
+
+.env
+.env.*
+
+dist
+
+*.log

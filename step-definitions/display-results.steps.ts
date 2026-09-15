@@ -503,17 +503,18 @@ When('I click on the dropdown for the {string} filter on the Display Results pag
     .toBe(true);
 
   if (!target) throw new Error(`Dropdown for "${filterName}" not found on Display Results page`);
+  const dropdownTarget = target as Locator;
 
   // Diagnose the found element
-  const tagName = await target.evaluate((el) => el.tagName).catch(() => 'unknown');
-  const role = await target.getAttribute('role').catch(() => '');
+  const tagName = await dropdownTarget.evaluate((el) => el.tagName).catch(() => 'unknown');
+  const role = await dropdownTarget.getAttribute('role').catch(() => '');
   console.log(`[DROPDOWN] Found: tag=${tagName}, role=${role}`);
 
-  await target.scrollIntoViewIfNeeded().catch(() => undefined);
+  await dropdownTarget.scrollIntoViewIfNeeded().catch(() => undefined);
 
   if (tagName === 'INPUT' && role === 'combobox') {
     // SAP ComboBox: click the input to focus, then use keyboard to open the full list
-    await target.click({ timeout: 10_000 });
+    await dropdownTarget.click({ timeout: 10_000 });
     await dp.waitForTimeout(200);
 
     // Try the arrow button sibling first (button or span element)
@@ -540,17 +541,17 @@ When('I click on the dropdown for the {string} filter on the Display Results pag
       }
     }
   } else if (tagName === 'SELECT' ||
-    (await target.evaluate((el) => (el as HTMLElement).style?.display === 'none').catch(() => false))) {
+    (await dropdownTarget.evaluate((el) => (el as HTMLElement).style?.display === 'none').catch(() => false))) {
     // Hidden native select — click the visible SAP wrapper instead
     const sapWrapper = dp.locator('.sapMSlt[role="combobox"], div[role="combobox"]').first();
     const wrapperTarget = await visibleLocator(sapWrapper);
     if (wrapperTarget) {
       await wrapperTarget.click({ timeout: 10_000 });
     } else {
-      await target.click({ timeout: 10_000, force: true });
+      await dropdownTarget.click({ timeout: 10_000, force: true });
     }
   } else {
-    await target.click({ timeout: 10_000 });
+    await dropdownTarget.click({ timeout: 10_000 });
   }
 
   // Wait for SAP popup to appear

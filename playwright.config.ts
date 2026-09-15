@@ -65,7 +65,6 @@ function prepareBddArtifacts(): void {
   execSync('npm run bddgen', {
     cwd: process.cwd(),
     stdio: 'inherit',
-    shell: true,
     env: {
       ...process.env,
       PW_BDD_GENERATING: '1',
@@ -105,6 +104,24 @@ function isBddGenerationProcess(): boolean {
   return process.argv.some((arg) => arg.toLowerCase().includes('bddgen'));
 }
 
+function resolveChromiumExecutable(): string | undefined {
+  if (process.env.PLAYWRIGHT_EXECUTABLE_PATH) {
+    return process.env.PLAYWRIGHT_EXECUTABLE_PATH;
+  }
+
+  const windowsCandidates = [
+    path.join(process.env.ProgramFiles ?? '', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+    path.join(process.env['ProgramFiles(x86)'] ?? '', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+    path.join(process.env.LOCALAPPDATA ?? '', 'Google', 'Chrome', 'Application', 'chrome.exe'),
+    path.join(process.env.ProgramFiles ?? '', 'Microsoft', 'Edge', 'Application', 'msedge.exe'),
+    path.join(process.env['ProgramFiles(x86)'] ?? '', 'Microsoft', 'Edge', 'Application', 'msedge.exe'),
+  ];
+
+  return windowsCandidates.find((candidate) => fs.existsSync(candidate));
+}
+
+const chromiumExecutable = resolveChromiumExecutable();
+
 if (!isBddGenerationProcess()) {
   cleanRunArtifacts();
   prepareBddArtifacts();
@@ -137,11 +154,15 @@ export default defineConfig({
   use: {
     baseURL: envConfig.baseUrl,
     browserName: 'chromium',
+    launchOptions: {
+      executablePath: chromiumExecutable,
+      ignoreDefaultArgs: ['--disable-extensions'],
+    },
     headless: envConfig.headless,
     actionTimeout: 15_000,
     trace: 'on-first-retry',
     screenshot: 'on',
-    video: 'on',
+    video: 'off',
     ignoreHTTPSErrors: true,
     viewport: { width: 1366, height: 768 },
   },

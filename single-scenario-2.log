@@ -315,7 +315,3 @@ At line:1 char:1
 
 [1A[2K[MONITOR] Reloading page to check "Complete" = "100%" (attempt 9/30)...
 
-[1A[2K[MONITOR] "Complete" not yet "100%" for "/BTR/DIF_CL_AUTO_SFLIGHT_1" ΓÇö row: /BTR/DIF_CL_AUTO_SFLIGHT_1TESTALL21.07.2026, 11:56:54StoppedObject StatusWarning issued0%0%  0:00:000ParametersApplication LogResume InstanceParallel 
-
-[1A[2K[MONITOR] Reloading page to check "Complete" = "100%" (attempt 10/30)...
-

@@ -50,8 +50,18 @@ async function visibleEnabled(locator: Locator): Promise<Locator> {
 async function clickElement(locator: Locator): Promise<void> {
   const target = await visible(locator);
   await target.scrollIntoViewIfNeeded().catch(() => undefined);
-  await target.click({ timeout: 15_000 }).catch(async () => {
-    await target.evaluate((el) => (el as HTMLElement).click());
+
+  const clicked = await target.click({ timeout: 15_000 }).then(() => true).catch(() => false);
+  if (clicked) {
+    return;
+  }
+
+  await target.click({ timeout: 15_000, force: true }).catch(async () => {
+    await target.evaluate((el) => {
+      if (el instanceof HTMLElement) {
+        el.click();
+      }
+    });
   });
 }
 
@@ -194,21 +204,19 @@ async function clickDashboardTile(page: Page, tileName: string): Promise<void> {
       }
     }
 
-    const allMyAppsButton = page
-      .getByRole('button', { name: /all\s*my\s*apps/i })
-      .or(page.getByRole('button', { name: /apps\s*menu/i }))
-      .or(page.locator('xpath=//*[contains(translate(normalize-space(.), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "all my apps") and (@role="button" or self::button)][1]'));
+    const shellNavButton = page
+      .locator('button, a, [role="button"], [role="link"]')
+      .filter({ hasText: /all\s*my\s*apps|apps\s*menu|app\s*finder|launchpad/i })
+      .first();
 
-    const allMyAppsVisible = await visible(allMyAppsButton).catch(() => null);
+    const allMyAppsVisible = await visible(shellNavButton).catch(() => null);
     if (allMyAppsVisible) {
       await clickElement(allMyAppsVisible);
 
       const allMyAppsItem = page
-        .getByRole('menuitem', { name: tilePattern })
-        .or(page.getByRole('treeitem', { name: tilePattern }))
-        .or(page.getByRole('link', { name: tilePattern }))
-        .or(page.getByRole('button', { name: tilePattern }))
-        .or(page.getByText(tilePattern));
+        .locator('button, a, [role="menuitem"], [role="treeitem"], [role="link"], li, div, span')
+        .filter({ hasText: tilePattern })
+        .first();
 
       const selectedItem = await expect
         .poll(async () => visible(allMyAppsItem).catch(() => null), { timeout: 8_000 })
@@ -1568,7 +1576,7 @@ Then('Verify the {string} field defaults to {string}', async ({ page }, fieldNam
     .toBe(true);
 });
 
-When('I click the {string} button', async ({ page }, buttonName: string) => {
+When('I click the {string} button', async ({ page, $testInfo }, buttonName: string) => {
   if (buttonName.toLowerCase() === 'save') {
     const saveButton = byButton(page, 'Save');
     const hasVisibleSave = (await visible(saveButton).then(() => true).catch(() => false));
@@ -1667,21 +1675,33 @@ Then('Verify that the {string} message is displayed', async ({ page, $testInfo }
 });
 
 When('I click on the Diffuser Program {string}', async ({ page }, programName: string) => {
-  for (const candidate of candidatePages(page)) {
-    if (candidate.isClosed()) {
-      continue;
+  const deadline = Date.now() + 30_000;
+  let reloadedManagerPage = false;
+
+  while (Date.now() < deadline) {
+    for (const candidate of candidatePages(page)) {
+      if (candidate.isClosed()) {
+        continue;
+      }
+
+      const program = candidate
+        .getByRole('link', { name: pattern(programName) })
+        .or(candidate.getByRole('row', { name: pattern(programName) }))
+        .or(candidate.getByText(pattern(programName)));
+      const hasVisibleProgram = await visible(program).then(() => true).catch(() => false);
+      if (hasVisibleProgram) {
+        await candidate.bringToFront().catch(() => undefined);
+        await clickElement(program);
+        return;
+      }
+
+      if (!reloadedManagerPage && candidate.url().toLowerCase().includes('diffuser-display')) {
+        reloadedManagerPage = true;
+        await candidate.reload({ waitUntil: 'domcontentloaded' }).catch(() => undefined);
+      }
     }
 
-    const program = candidate
-      .getByRole('link', { name: pattern(programName) })
-      .or(candidate.getByRole('row', { name: pattern(programName) }))
-      .or(candidate.getByText(pattern(programName)));
-    const hasVisibleProgram = await visible(program).then(() => true).catch(() => false);
-    if (hasVisibleProgram) {
-      await candidate.bringToFront().catch(() => undefined);
-      await clickElement(program);
-      return;
-    }
+    await page.waitForTimeout(500);
   }
 
   throw new Error(`Could not find visible Diffuser Program "${programName}" on any open page.`);
@@ -1763,17 +1783,22 @@ When('I select option {string} from the {string} dropdown', async ({ page }, opt
     );
   }
 
-  await dropdown.click({ timeout: 10_000 }).catch(async () => {
-    await dropdown.evaluate((el) => (el as HTMLElement).click());
+  if (!dropdown) {
+    throw new Error(`Dropdown "${dropdownName}" not found`);
+  }
+  const dropdownTarget: Locator = dropdown;
+
+  await dropdownTarget.click({ timeout: 10_000 }).catch(async () => {
+    await dropdownTarget.evaluate((el) => (el as HTMLElement).click());
   });
 
   const valueTextbox = page.locator(
     `xpath=(//*[normalize-space()="${cleanName}" or normalize-space()="${cleanName}:"])[1]/following::*[@role='textbox' or self::input][1]`,
   );
 
-  const initialValueTarget = await visible(valueTextbox).catch(() => dropdown);
+  const initialValueTarget: Locator = await visible(valueTextbox).catch(() => dropdownTarget);
   const initialInputValue = (await initialValueTarget.inputValue().catch(() => '')) ?? '';
-  const initialAriaValue = (await dropdown.getAttribute('aria-valuetext').catch(() => '')) ?? '';
+  const initialAriaValue = (await dropdownTarget.getAttribute('aria-valuetext').catch(() => '')) ?? '';
   const initialTextValue = (await initialValueTarget.textContent().catch(() => '')) ?? '';
   const initialNormalizedValue = `${initialInputValue} ${initialAriaValue} ${initialTextValue}`.trim();
 
