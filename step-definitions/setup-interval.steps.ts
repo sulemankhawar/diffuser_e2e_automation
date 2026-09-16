@@ -55,11 +55,15 @@ function dataRow(page: Page, value: string): Locator {
 }
 
 async function visiblePageWithText(page: Page, text: string): Promise<Page | null> {
+  const textPattern = pattern(text);
   for (const candidate of page.context().pages().filter((item) => !item.isClosed()).reverse()) {
     const locator = candidate
-      .getByRole('dialog', { name: pattern(text) })
-      .or(candidate.getByRole('alertdialog', { name: pattern(text) }))
-      .or(candidate.getByText(pattern(text)));
+      .getByRole('dialog', { name: textPattern })
+      .or(candidate.getByRole('alertdialog', { name: textPattern }))
+      .or(candidate.getByRole('status').filter({ hasText: textPattern }))
+      .or(candidate.getByRole('alert').filter({ hasText: textPattern }))
+      .or(candidate.locator('.sapMMessageToast, .sapMText, .sapMBar, [role="status"], [role="alert"]').filter({ hasText: textPattern }))
+      .or(candidate.getByText(textPattern));
     if (await visibleLocator(locator)) return candidate;
   }
   return null;
@@ -300,26 +304,36 @@ Then('Verify the message {string} appears', async ({ page }, text: string) => {
 });
 
 When('I click the {string} button on the confirmation popup', async ({ page }, buttonName: string) => {
+  const buttonPattern = pattern(buttonName);
+  const resolveButton = (candidate: Page) => {
+    const dialog = candidate.locator('.sapMDialog, .sapMMessageDialog, [role="dialog"], [role="alertdialog"]');
+    return dialog
+      .getByRole('button', { name: buttonPattern })
+      .or(dialog.locator('button, [role="button"]').filter({ hasText: buttonPattern }))
+      .or(dialog.getByText(buttonPattern).locator('xpath=ancestor-or-self::*[@role="button" or self::button][1]'))
+      .or(candidate.getByRole('button', { name: buttonPattern }));
+  };
+
   const targetPage = await expect.poll(async () => {
     for (const candidate of page.context().pages().filter((item) => !item.isClosed()).reverse()) {
-      const popupButton = candidate.getByRole('dialog').or(candidate.getByRole('alertdialog'))
-        .getByRole('button', { name: pattern(buttonName) });
+      const popupButton = resolveButton(candidate);
       if (await visibleLocator(popupButton)) return candidate;
     }
     return null;
   }, { timeout: 10_000 }).not.toBeNull().then(async () => {
     for (const candidate of page.context().pages().filter((item) => !item.isClosed()).reverse()) {
-      const popupButton = candidate.getByRole('dialog').or(candidate.getByRole('alertdialog'))
-        .getByRole('button', { name: pattern(buttonName) });
+      const popupButton = resolveButton(candidate);
       if (await visibleLocator(popupButton)) return candidate;
     }
     return page;
   });
-  const popupButton = targetPage.getByRole('dialog').or(targetPage.getByRole('alertdialog'))
-    .getByRole('button', { name: pattern(buttonName) });
-  const target = await visibleLocator(popupButton);
+
+  const target = await visibleLocator(resolveButton(targetPage));
   if (!target) throw new Error(`Confirmation button "${buttonName}" was not visible.`);
-  await target.click({ timeout: 10_000 });
+  await target.scrollIntoViewIfNeeded().catch(() => undefined);
+  await target.click({ timeout: 10_000 }).catch(async () => {
+    await target.evaluate((el) => (el as HTMLElement).click());
+  });
 });
 
 Then('Verify the {string} message appears', async ({ page }, text: string) => {

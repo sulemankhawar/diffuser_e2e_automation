@@ -17,6 +17,16 @@ function pattern(text: string): RegExp {
   return new RegExp(normalized, 'i');
 }
 
+function exactPattern(text: string): RegExp {
+  const normalized = text
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join('\\s+');
+  return new RegExp(`^\\s*${normalized}\\s*$`, 'i');
+}
+
 async function visible(locator: Locator): Promise<Locator> {
   const count = await locator.count();
   for (let i = 0; i < count; i++) {
@@ -69,24 +79,30 @@ function candidatePages(page: Page): Page[] {
   return [page, ...page.context().pages().filter((candidate) => candidate !== page).reverse()];
 }
 
-async function findPageWithVisibleButton(page: Page, label: string): Promise<Page> {
-  for (const candidate of candidatePages(page)) {
-    if (candidate.isClosed()) {
-      continue;
+async function findPageWithVisibleButton(page: Page, label: string, timeout = 15_000): Promise<Page> {
+  const deadline = Date.now() + timeout;
+
+  while (Date.now() < deadline) {
+    for (const candidate of candidatePages(page)) {
+      if (candidate.isClosed()) {
+        continue;
+      }
+
+      await candidate.bringToFront().catch(() => undefined);
+
+      const buttonLocator = byButton(candidate, label);
+      const hasVisibleButton = await (/^schedule$/i.test(label)
+        ? visibleEnabled(buttonLocator)
+        : visible(buttonLocator))
+        .then(() => true)
+        .catch(() => false);
+
+      if (hasVisibleButton) {
+        return candidate;
+      }
     }
 
-    await candidate.bringToFront().catch(() => undefined);
-
-    const buttonLocator = byButton(candidate, label);
-    const hasVisibleButton = await (/^schedule$/i.test(label)
-      ? visibleEnabled(buttonLocator)
-      : visible(buttonLocator))
-      .then(() => true)
-      .catch(() => false);
-
-    if (hasVisibleButton) {
-      return candidate;
-    }
+    await page.waitForTimeout(250);
   }
 
   throw new Error(`Could not find a visible button named "${label}" on any open page.`);
@@ -1677,6 +1693,7 @@ Then('Verify that the {string} message is displayed', async ({ page, $testInfo }
 When('I click on the Diffuser Program {string}', async ({ page }, programName: string) => {
   const deadline = Date.now() + 30_000;
   let reloadedManagerPage = false;
+  const targetExact = exactPattern(programName);
 
   while (Date.now() < deadline) {
     for (const candidate of candidatePages(page)) {
@@ -1685,9 +1702,9 @@ When('I click on the Diffuser Program {string}', async ({ page }, programName: s
       }
 
       const program = candidate
-        .getByRole('link', { name: pattern(programName) })
-        .or(candidate.getByRole('row', { name: pattern(programName) }))
-        .or(candidate.getByText(pattern(programName)));
+        .getByRole('link', { name: targetExact })
+        .or(candidate.locator('tr, [role="row"], .sapMListTblRow, .sapMLIB, [role="listitem"]').filter({ has: candidate.getByText(targetExact) }))
+        .or(candidate.getByText(targetExact));
       const hasVisibleProgram = await visible(program).then(() => true).catch(() => false);
       if (hasVisibleProgram) {
         await candidate.bringToFront().catch(() => undefined);
@@ -1708,11 +1725,18 @@ When('I click on the Diffuser Program {string}', async ({ page }, programName: s
 });
 
 Then('Verify the Program details page is displayed for program {string}', async ({ page }, programName: string) => {
+  const targetExact = exactPattern(programName);
   await expect
     .poll(async () => {
       for (const candidate of candidatePages(page)) {
-        if (!candidate.isClosed() && await headingOrText(candidate, programName).count().catch(() => 0) > 0) {
-          return true;
+        if (!candidate.isClosed()) {
+          const heading = candidate
+            .getByRole('heading', { name: targetExact })
+            .or(candidate.locator('header, .sapFDynamicPageHeader, .sapUxAPObjectPageHeader, [role="heading"]').filter({ hasText: targetExact }))
+            .or(candidate.getByText(targetExact));
+          if (await visible(heading).then(() => true).catch(() => false)) {
+            return true;
+          }
         }
       }
       return false;
@@ -1731,34 +1755,48 @@ Then('Verify that a confirmation popup box appears', async ({ page }) => {
 });
 
 Then('Verify that the {string} button is displayed', async ({ page }, buttonName: string) => {
-  const targetPage = await findPageWithVisibleButton(page, buttonName);
+  const targetPage = await findPageWithVisibleButton(page, buttonName, 15_000);
   await expect.poll(() => visible(byButton(targetPage, buttonName)).then(() => true).catch(() => false), {
     timeout: 10_000,
   }).toBe(true);
 });
 
 Then('Verify that the Diffuser Program {string} is no longer listed', async ({ page }, programName: string) => {
-  const managePage = candidatePages(page).find((candidate) =>
-    candidate.url().toLowerCase().includes('diffuser-display'),
-  );
-  if (managePage) {
-    await managePage.reload({ waitUntil: 'domcontentloaded' });
-    await managePage.bringToFront().catch(() => undefined);
-  }
+  const targetExact = exactPattern(programName);
+  let reloaded = false;
 
   await expect.poll(async () => {
     for (const candidate of candidatePages(page)) {
+      if (candidate.isClosed()) {
+        continue;
+      }
+
       const program = candidate
-        .getByRole('list')
-        .getByRole('listitem', { name: pattern(programName) });
-      if (await visible(program).then(() => true).catch(() => false)) return false;
+        .getByRole('link', { name: targetExact })
+        .or(candidate.locator('tr, [role="row"], .sapMListTblRow, .sapMLIB, [role="listitem"]').filter({ has: candidate.getByText(targetExact) }))
+        .or(candidate.getByText(targetExact));
+
+      const isStillVisible = await visible(program).then(() => true).catch(() => false);
+      if (isStillVisible) {
+        if (!reloaded) {
+          const managePage = candidatePages(page).find((c) =>
+            c.url().toLowerCase().includes('diffuser-display'),
+          );
+          if (managePage && !managePage.isClosed()) {
+            reloaded = true;
+            await managePage.reload({ waitUntil: 'domcontentloaded' }).catch(() => undefined);
+            await managePage.bringToFront().catch(() => undefined);
+          }
+        }
+        return false;
+      }
     }
     return true;
   }, { timeout: 20_000 }).toBe(true);
 });
 
 When('I click on the Edit button', async ({ page }) => {
-  const targetPage = await findPageWithVisibleButton(page, 'Edit');
+  const targetPage = await findPageWithVisibleButton(page, 'Edit', 15_000);
   await targetPage.bringToFront().catch(() => undefined);
   await clickElement(byButton(targetPage, 'Edit'));
 });
