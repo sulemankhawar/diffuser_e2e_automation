@@ -26,7 +26,7 @@ jobs:
       run: npx playwright install --with-deps
     - name: Configure DNS for SAP System
       run: |
-        echo "10.10.10.1 bs4b5tap1.bti.local" | sudo tee -a /etc/hosts
+        echo "10.0.3.87 bs4b5tap1.bti.local" | sudo tee -a /etc/hosts
     - name: Run Playwright tests
       run: npx playwright test
     - uses: actions/upload-artifact@v4
