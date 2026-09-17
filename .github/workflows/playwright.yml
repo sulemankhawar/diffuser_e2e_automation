@@ -14,7 +14,8 @@ on:
 jobs:
   test:
     timeout-minutes: 60
-    runs-on: ubuntu-latest
+    # Self-hosted runner on the corporate network so the internal SAP host is reachable.
+    runs-on: [self-hosted, sap-network]
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -24,11 +25,24 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
-    - name: Configure DNS for SAP System
+    - name: Ensure SAP host resolves
+      shell: pwsh
       run: |
-        echo "10.0.3.87 bs4b5tap1.bti.local" | sudo tee -a /etc/hosts
+        $entry = "10.0.3.87 bs4b5tap1.bti.local"
+        $hosts = "$env:SystemRoot\System32\drivers\etc\hosts"
+        if (-not (Select-String -Path $hosts -Pattern 'bs4b5tap1\.bti\.local' -Quiet)) {
+          Add-Content -Path $hosts -Value $entry
+        }
     - name: Run Playwright tests
       run: npx playwright test
+      env:
+        TEST_ENV: staging
+        SAP_TEST_PASSWORD: ${{ secrets.SAP_TEST_PASSWORD }}
+        SAP_PASSWORD_TESTALL: ${{ secrets.SAP_PASSWORD_TESTALL }}
+        SAP_PASSWORD_TESTADMIN: ${{ secrets.SAP_PASSWORD_TESTADMIN }}
+        SAP_PASSWORD_TESTDISPLAY: ${{ secrets.SAP_PASSWORD_TESTDISPLAY }}
+        SAP_PASSWORD_TESTMONITOR: ${{ secrets.SAP_PASSWORD_TESTMONITOR }}
+        SAP_PASSWORD_TESTNO: ${{ secrets.SAP_PASSWORD_TESTNO }}
     - name: Upload HTML report
       uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
