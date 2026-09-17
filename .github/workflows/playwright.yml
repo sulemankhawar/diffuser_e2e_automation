@@ -14,8 +14,7 @@ on:
 jobs:
   test:
     timeout-minutes: 60
-    # Self-hosted runner on the corporate network so the internal SAP host is reachable.
-    runs-on: [self-hosted, sap-network]
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -25,14 +24,9 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
-    - name: Ensure SAP host resolves
-      shell: pwsh
+    - name: Configure DNS for SAP System
       run: |
-        $entry = "10.0.3.87 bs4b5tap1.bti.local"
-        $hosts = "$env:SystemRoot\System32\drivers\etc\hosts"
-        if (-not (Select-String -Path $hosts -Pattern 'bs4b5tap1\.bti\.local' -Quiet)) {
-          Add-Content -Path $hosts -Value $entry
-        }
+        echo "10.0.3.87 bs4b5tap1.bti.local" | sudo tee -a /etc/hosts
     - name: Run Playwright tests
       run: npx playwright test
       env:
